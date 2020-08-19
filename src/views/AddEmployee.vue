@@ -1,17 +1,17 @@
 <template>
-  <div class="home">
-    <EmployeeData />
+  <div class="addEmployee">
+    <AddEmployee />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import EmployeeData from '@/components/EmployeeData.vue'
+import AddEmployee from '@/components/AddEmployee.vue'
 
 export default {
   name: 'App',
   components: {
-    EmployeeData
+    AddEmployee
   }
 }
 </script>
