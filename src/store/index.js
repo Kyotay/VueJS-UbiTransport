@@ -6,14 +6,22 @@ import API from './api'
 Vue.use(Vuex, VueAxios);
 
 export default new Vuex.Store({
+
   state: {
-    employees: []
+    employees: [],
+    keyword: ""
   },
+
   mutations: {
     SAVE_EMPLOYEES(state, employees) {
       state.employees = employees;
+    },
+
+    UPDATE_KEYWORD(state, keyword) {
+      state.keyword = keyword;
     }
   },
+
   actions: {
     loadEmployees({commit}) {
       API.get('employees').then(result => {
@@ -34,6 +42,7 @@ export default new Vuex.Store({
     })
     },
   },
+
   modules: {
   }
 })
