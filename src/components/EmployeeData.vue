@@ -11,7 +11,7 @@
         <th>Age</th>
         <th>Salary</th>
       </tr>
-      <tr v-for="employee in searchEmployees" :key="employee">
+      <tr v-for="(employee, index) in searchEmployees" :key="index" @click="modal(employee)" >
         <td>{{ employee.id }}</td>
         <td>{{ employee.employee_name }}</td>
         <td>{{ employee.employee_age }}</td>
@@ -25,7 +25,7 @@
   export default {
     
     computed: {
-       message: {
+        message: {
             get () {
                 return this.$store.state.keyword
             },
@@ -34,14 +34,14 @@
             }
         },
 
-        /*employees: {
+        employeeProfile: {
             get () {
-                return this.$store.state.employees.data
+                return this.$store.state.employeeProfile
             },
             set (value) {
-                this.$store.commit('SAVE_EMPLOYEES', value)
+                this.$store.commit('UPDATE_ONE_EMPLOYEE', value)
             }
-        },*/
+        },
 
       searchEmployees() {
         var tempEmployees = this.$store.state.employees.data;
@@ -57,6 +57,14 @@
       }
 
     },
+    methods: {
+      modal(employee) {
+        this.$store.state.showModal = true;
+        this.employeeProfile = employee;
+        this.$store.dispatch('loadEmployeeById', this.employeeProfile.id);
+      }
+    },
+
     created() {
     this.$store.dispatch('loadEmployees');
   }

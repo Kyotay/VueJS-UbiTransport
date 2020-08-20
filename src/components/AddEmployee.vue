@@ -2,18 +2,9 @@
     <div>
         <form
             id="app"
+            @submit.prevent="false"
             @submit="addEmployee"
             >
-            <p>
-                <label for="id">Id</label>
-                <input
-                id="id"
-                v-model="id"
-                type="number"
-                name="id"
-                min="0"
-                >
-            </p>
             <p>
                 <label for="name">Name</label>
                 <input
@@ -55,6 +46,33 @@
 
 <script>
     export default {
+        computed: {
+            salary: {
+                get () {
+                    return this.$store.state.salary
+                },
+                set (value) {
+                    this.$store.commit('CREATE_SALARY', value)
+                }
+            },
+            age: {
+                get () {
+                    return this.$store.state.age
+                },
+                set (value) {
+                    this.$store.commit('CREATE_AGE', value)
+                }
+            },
+            name: {
+                get () {
+                    return this.$store.state.name
+                },
+                set (value) {
+                    this.$store.commit('CREATE_NAME', value)
+                }
+            },
+        },
+
         methods: {
             addEmployee() {
                 this.$store.dispatch('addEmployee');
