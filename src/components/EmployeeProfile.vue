@@ -1,70 +1,48 @@
 <template>
-    <div>
-        <modal v-if="showModal" >
+    <div v-if="showModal">
             <transition name="modal">
                 <div class="modal-mask">
                 <div class="modal-wrapper">
-                    <tr>
-                        <th scope="col">
-                            <div class="modal-container">
-                            <div class="modal-header">
-                                <h3 slot="header">{{ this.$store.state.employee.data.employee_name}}</h3>
-                            </div>
-                            <div class="modal-body">
-                                <slot name="body">
-                                    Id: {{ this.$store.state.employee.data.id}}
-                                    <br>
-                                    Age: {{ this.$store.state.employee.data.employee_age}}
-                                    <br>
-                                    Salary: {{ this.$store.state.employee.data.employee_salary}}
-                                </slot>
-                            </div>
-                            <div class="modal-footer">
-                                <slot name="footer">
-                                <button class="modal-default-button" @click="showModal = false">
-                                    Close
-                                </button>
-                                </slot>
-                            </div>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <form
-                                id="app"
-                                @submit.prevent="updateEmployee">
-                            <div class="modal-container">
-                            <div class="modal-header">
-                                <h3 slot="header">
-                                    <input id="name" v-model="name" type="text" name="name">
-                                </h3>
-                            </div>
-                            <div class="modal-body">
-                                <slot name="body">
-                                    <input id="id" disabled=true value="Id never move">
-                                    <br>
-                                    <input id="age" v-model="age" type="number" name="age" min="0">
-                                    <br>
-                                    <input id="salary" v-model="salary" type="number" name="salary" min="0">
-                                </slot>
-                            </div>
-                            <div class="modal-footer">
-                                <slot name="footer">
-                                    <input
-                                    type="submit"
-                                    value="Update"
-                                    >
-                                </slot>
-                            </div>
-                            </div>
-                            </form>
-                            <button @click="deleteEmployee">Delete</button>
-                        </th>
-                    </tr>
-
+                    <form
+                        id="app"
+                        @submit.prevent="updateEmployee">
+                    <div class="modal-container">
+                        <b-button class="close" type="button" variant="success" @click="showModal = false">X</b-button>
+                    <div class="modal-header">
+                        <h3 slot="header">
+                            {{ this.$store.state.employee.data.employee_name }}
+                            <b-form-input id="name" v-model="name" type="text" name="name" placeholder="New name"/>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <slot name="slot-body">
+                            <h4>
+                                Current Id: {{ this.$store.state.employee.data.id}}
+                            </h4> 
+                            <b-form-input id="id" :disabled="true" value="Id never move"/>
+                            <br>
+                            <h4>
+                                Current age: {{ this.$store.state.employee.data.employee_age}}
+                            </h4> 
+                            <b-form-input id="age" v-model="age" type="number" name="age" min="0"/>
+                            <br>
+                            <h4>
+                                Current salary: {{ this.$store.state.employee.data.employee_salary}}
+                            </h4> 
+                            <b-form-input id="salary" v-model="salary" type="number" name="salary" min="0"/>
+                        </slot>
+                    </div>
+                    <div class="modal-footer">
+                        <slot name="footer">
+                        <b-button class="delete-employee" variant="danger" type="button" @click="deleteEmployee">Delete</b-button>
+                        <b-button class="update-employee" variant="success" type="submit">Update</b-button>
+                        </slot>
+                    </div>
+                    </div>
+                    </form>
                 </div>
                 </div>
             </transition>
-        </modal>
     </div>
 </template>
 
@@ -110,10 +88,7 @@
             updateEmployee(submitEvent) {
                 var newData = [];
                 if (submitEvent.target.elements.name.value)
-                {
-                    console.log(submitEvent.target.elements.name.value);
                     newData.push(submitEvent.target.elements.name.value);
-                }
                 else
                     newData.push(this.$store.state.employee.data.employee_name);
                 this.$store.dispatch('updateEmployee', newData);
@@ -123,9 +98,78 @@
                 this.$store.dispatch('deleteEmployee');
             }
         },
+        created() {
+            this.$store.state.employee.data = [];
+        }
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 35%;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  padding-left: 10px;
+    text-align: left;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-body h4 {
+    padding-left: 10px;
+    text-align: left;
+    color: #42b983;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.delete-employee {
+    margin-top: 0px;
+}
 
 </style>

@@ -1,45 +1,23 @@
 <template>
-    <div>
+    <div class="container">
         <form
             id="app"
-            @submit.prevent="false"
+            @submit.prevent
             @submit="addEmployee"
             >
             <p>
                 <label for="name">Name</label>
-                <input
-                id="name"
-                v-model="name"
-                type="text"
-                name="name"
-                >
+                <b-form-input id="name" v-model="name" type="text" name="name" :required="true"/>
             </p>
             <p>
                 <label for="age">Age</label>
-                <input
-                id="age"
-                v-model="age"
-                type="number"
-                name="age"
-                min="0"
-                >
+                <b-form-input id="age" v-model="age" type="number" name="age" min="18" :required="true"/>
             </p>
             <p>
                 <label for="salary">Salary</label>
-                <input
-                id="salary"
-                v-model="salary"
-                type="number"
-                name="salary"
-                min="0"
-                >
+                <b-form-input id="salary" v-model="salary" type="number" name="salary" min="0" :required="true"/>
             </p>
-            <p>
-                <input
-                type="submit"
-                value="Add this employee"
-                >
-            </p>
+            <b-button class="add-employee" variant="success" type="submit">Update</b-button>
         </form>
     </div>
 </template>
@@ -47,6 +25,7 @@
 <script>
     export default {
         computed: {
+            
             salary: {
                 get () {
                     return this.$store.state.salary
@@ -55,6 +34,7 @@
                     this.$store.commit('CREATE_SALARY', value)
                 }
             },
+
             age: {
                 get () {
                     return this.$store.state.age
@@ -63,6 +43,7 @@
                     this.$store.commit('CREATE_AGE', value)
                 }
             },
+
             name: {
                 get () {
                     return this.$store.state.name
@@ -81,6 +62,8 @@
     }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+    .container {
+        font-size: x-large;
+    }
 </style>

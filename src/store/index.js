@@ -9,8 +9,9 @@ export default new Vuex.Store({
 
   state: {
     employees: [],
-    employeeProfile: [],
     employee: [],
+    employeesFiltered: [],
+    employeesFilteredFull: [],
     keyword: "",
     showModal: false,
     name: "",
@@ -28,6 +29,14 @@ export default new Vuex.Store({
 
     SAVE_EMPLOYEE(state, employee) {
       state.employee = employee;
+    },
+
+    UPDATE_EMPLOYEESFILTERED(state, employeesFiltered) {
+      state.employeesFiltered = employeesFiltered;
+    },
+
+    UPDATE_EMPLOYEESFILTEREDFULL(state, employeesFilteredFull) {
+      state.employeesFilteredFull = employeesFilteredFull;
     },
 
     UPDATE_KEYWORD(state, keyword) {
@@ -60,17 +69,29 @@ export default new Vuex.Store({
 
     SHOW_MODAL(state, showModal) {
       state.showModal = showModal;
-    },
-
-    UPDATE_ONE_EMPLOYEE(state, employeeProfile) {
-      state.employeeProfile = employeeProfile;
     }
   },
 
   actions: {
+    showEmployees({commit}, pageNumber) {
+      API.get('employees').then(result => {
+        commit('SAVE_EMPLOYEES', result.data);
+        commit('UPDATE_EMPLOYEESFILTEREDFULL', result.data);
+        let stock = this.state.employeesFilteredFull.data;
+        if (pageNumber == 1)
+          this.state.employees.data = stock.slice(0, (pageNumber * 5 ));
+        else
+          this.state.employees.data = stock.slice((pageNumber * Math.round(stock.length/5) + 1) - 6, pageNumber * Math.round(stock.length/5));
+      }).catch(error => {
+        throw new Error(`API ${error}`);
+      });
+    },
+
     loadEmployees({commit}) {
       API.get('employees').then(result => {
         commit('SAVE_EMPLOYEES', result.data);
+        commit('UPDATE_EMPLOYEESFILTEREDFULL', result.data);
+        this.state.employees.data = this.state.employeesFilteredFull.data.slice(0, 5);
       }).catch(error => {
         throw new Error(`API ${error}`);
       });
@@ -85,22 +106,10 @@ export default new Vuex.Store({
     },
 
     addEmployee() {
-      API.post('create', {"name":this.state.create_name, "salary":this.state.create_salary, "age":this.state.create_age}, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    }})
-    .then(data => {
-      console.log(data);
-    //handle the data
-    })
-    .catch(error => {
-        console.log(error.response)
-    })
-    },
-
-    updateEmployee(newData) {
-      API.put('update/' + this.state.employee.data.id, newData, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    }})
-      .then(data => {
-        console.log(data);
+      API.post('create', {"employee_name":this.state.create_name.toString(), "employee_salary":this.state.create_salary.toString(), "employee_age":this.state.create_age.toString()}, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+      }})
+      .then(result => {
+        alert("Request result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message + "\n- New employee ID: " + result.data.data.id );
       //handle the data
       })
       .catch(error => {
@@ -108,16 +117,28 @@ export default new Vuex.Store({
       })
     },
 
+    updateEmployee(newData) {
+      API.put('update/' + this.state.employee.data.id, newData, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+      }})
+        .then(result => {
+          alert("Request update employee result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message);
+        //handle the data
+        })
+        .catch(error => {
+            console.log(error.response)
+        })
+    },
+
     deleteEmployee() {
       API.delete('delete/' + this.state.employee.data.id, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-    }})
-    .then(data => {
-      console.log(data);
-    //handle the data
-    })
-    .catch(error => {
-        console.log(error.response)
-    })
+      }})
+      .then(result => {
+          alert("Request update employee result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message);
+      //handle the data
+      })
+      .catch(error => {
+          console.log(error.response)
+      })
     }
 
   },
