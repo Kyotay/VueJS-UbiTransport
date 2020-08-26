@@ -1,12 +1,15 @@
-import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mutations } from '../../src/store/index.js'
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg }
-    })
-    expect(wrapper.text()).toMatch(msg)
-  })
-})
+describe('Mutations', () => {
+
+  it('setItems updates state with items in payload', () => {
+    const { SAVE_EMPLOYEES } = mutations
+    const state = {
+      employees: []
+    }
+    const employees = {"employees": [{}, {}]}
+    SAVE_EMPLOYEES(state, employees )
+    expect(state.employees).toBe(employees)
+  });
+
+});
