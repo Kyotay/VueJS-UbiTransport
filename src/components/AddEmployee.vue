@@ -55,6 +55,7 @@
         },
 
         methods: {
+            // Add one employee on the database by calling action.
             addEmployee() {
                 this.$store.dispatch('addEmployee');
             }

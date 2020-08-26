@@ -85,6 +85,7 @@
         },
 
         methods: {
+            // Get form data and update one employee data by action call.
             updateEmployee(submitEvent) {
                 var newData = [];
                 if (submitEvent.target.elements.name.value)
@@ -94,8 +95,9 @@
                 this.$store.dispatch('updateEmployee', newData);
             },
 
+            // Delete one employee by action call.
             deleteEmployee() {
-                this.$store.dispatch('deleteEmployee');
+                this.$store.dispatch('deleteEmployee', this.$store.state.employee.data.id);
             }
         },
         created() {

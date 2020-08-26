@@ -3,21 +3,6 @@
     <form id="search">
       <b-form-input class="search-employee" name="query" v-model="message" type="search" placeholder="Search an employee" size="lg"/>
     </form>
-    <!--Old table -->
-    <!--<table align="center">
-      <tr class="employees-list-header">
-        <th>Id</th>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Salary</th>
-      </tr>
-      <tr class="employees-list" v-for="(employee, index) in searchEmployees" :key="index" @click="modal(employee)" >
-        <td>{{ employee.id }}</td>
-        <td>{{ employee.employee_name }}</td>
-        <td>{{ employee.employee_age }}</td>
-        <td>{{ employee.employee_salary }}</td>
-      </tr>
-    </table>-->
     <b-table
       class="table-employee"
       show-empty
@@ -39,17 +24,16 @@
     
     computed: {
 
-        message: {
-            get () {
-                return this.$store.state.keyword
-            },
-            set (value) {
-                this.$store.commit('UPDATE_KEYWORD', value)
-            }
-        },
+      message: {
+          get () {
+              return this.$store.state.keyword
+          },
+          set (value) {
+              this.$store.commit('UPDATE_KEYWORD', value)
+          }
+      },
 
-       
-
+      // Function for filter employee by search bar.
       searchEmployees() {
         var tempEmployees = this.$store.state.employees.data;
         var tempMessage = this.message.toLowerCase();

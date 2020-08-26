@@ -20,6 +20,7 @@ const state = {
   create_salary: 0
 }
 
+// Mutations
 export const mutations = {
   SAVE_EMPLOYEES(state, employees) {
     state.employees = employees;
@@ -70,7 +71,10 @@ export const mutations = {
   }
 }
 
+// Actions
 export const actions = {
+
+  // Get all employees from the database, and commit the value to the variables.
   showEmployees({commit}, pageNumber) {
     API.get('employees').then(result => {
       commit('SAVE_EMPLOYEES', result.data);
@@ -85,6 +89,7 @@ export const actions = {
     });
   },
 
+  // Get employee from the database
   loadEmployees({commit}) {
     API.get('employees').then(result => {
       commit('SAVE_EMPLOYEES', result.data);
@@ -95,6 +100,7 @@ export const actions = {
     });
   },
 
+  // Get one employee from the database by specific ID
   loadEmployeeById({commit}, id) {
     API.get('employee/' + id).then(result => {
       commit('SAVE_EMPLOYEE', result.data);
@@ -103,36 +109,36 @@ export const actions = {
     });
   },
 
+  // Add one new employee to the database with values get from the form.
   addEmployee() {
     API.post('create', {"employee_name":this.state.create_name.toString(), "employee_salary":this.state.create_salary.toString(), "employee_age":this.state.create_age.toString()}, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
     }})
     .then(result => {
       alert("Request result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message + "\n- New employee ID: " + result.data.data.id );
-    //handle the data
     })
     .catch(error => {
         console.log(error.response)
     })
   },
 
+  // Update values of the selected employee (ID can't be modified)
   updateEmployee(newData) {
     API.put('update/' + this.state.employee.data.id, newData, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
     }})
       .then(result => {
         alert("Request update employee result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message);
-      //handle the data
       })
       .catch(error => {
           console.log(error.response)
       })
   },
 
-  deleteEmployee() {
-    API.delete('delete/' + this.state.employee.data.id, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+  // Delete one specific employee from the database by ID
+  deleteEmployee(id) {
+    API.delete('delete/' + id, {headers: { 'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
     }})
     .then(result => {
         alert("Request update employee result:\n- Statut: " + result.status + "\n- Statut text: " + result.statusText + "\n- Message: " + result.data.message);
-    //handle the data
     })
     .catch(error => {
         console.log(error.response)
